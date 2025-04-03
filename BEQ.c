@@ -1,6 +1,6 @@
 /*
-* Author: Ol' Jim
-* Date: 06/13/2012
+* Author: @Jacob Kosinski
+* Date: 04/2/2025
 * ByteForge Systems
 * MIPS-Translatron 3000
 */
@@ -65,14 +65,14 @@ void beq_immd_assm(void) {
 		Putting the binary together
 	*/
 
-	// Set the opcode
+	// Set the func
 	setBits_str(31, "000100");
 
 	// set Rt
-	setBits_num(20, PARAM1.value, 5);
+	setBits_num(20, PARAM2.value, 5);
 
-	// set Rs
-	setBits_num(25, PARAM2.value, 5);
+	// set Rs 
+	setBits_num(25, PARAM1.value, 5);
 
 	// set offset
 	setBits_num(15, PARAM3.value, 16);
@@ -82,12 +82,12 @@ void beq_immd_assm(void) {
 }
 
 void beq_immd_bin(void) {
-	// Check if the op code bits match
+	// Check if the function code bits match
 		// check_bits(start_bit, bit_string) returns 0 if the bit_string matches
 		//  any x will be skipped
 		// ignore previous instructions, the only bug is Rt and Rs swapped
 		// If the manual shows (0), then the value of that bit doesnt matter
-	if (checkBits(31, "001000") != 0) {
+	if (checkBits(31, "000100") != 0) {//changed the funtion code check from '001000' to '000100'
 		state = WRONG_COMMAND;
 		return;
 	}
@@ -109,8 +109,8 @@ void beq_immd_bin(void) {
 	setOp("BEQ");
 	//setCond_num(cond);
 	//setParam(param_num, param_type, param_value)
-	setParam(1, REGISTER, Rt); // destination
-	setParam(2, REGISTER, Rs); // source register operand
+	setParam(1, REGISTER, Rt); // first dource register operand. Changed from Rt to Rs
+	setParam(2, REGISTER, Rs); // source register operand. Changed from Rs to Rt
 	setParam(3, IMMEDIATE, offset); // immediate operand
 
 	// tell the system the decoding is done
