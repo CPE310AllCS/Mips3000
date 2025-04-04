@@ -1,3 +1,10 @@
+/*
+* Author: @Daniel Campa
+* Date: 04/4/2025
+* ByteForge Systems
+* MIPS-Translatron 3000
+*/
+
 #include "Instruction.h"
 
 void and_reg_assm(void) {
@@ -67,10 +74,10 @@ void and_reg_assm(void) {
 	setBits_str(5, "100100");
 
 	// set Rd
-	setBits_num(25, PARAM1.value, 5);
+	setBits_num(25, PARAM2.value, 5); // changed from PARAM1 to PARAM2
 
 	// set Rs
-	setBits_num(15, PARAM2.value, 5);
+	setBits_num(15, PARAM1.value, 5); // changed from PARAM2 to PARAM1
 
 	// set Rt
 	setBits_num(20, PARAM3.value, 5);
