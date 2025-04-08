@@ -33,9 +33,7 @@ int main(void) {
 			machine2assembly(buffer);
 		}
 		else if (strcmp(buffer, "3") == 0) {
-			//Commented out due to testbench not being implemented
-			//Optional testbench
-			//testbench();
+			testbench();
 		}
 		else if (strcmp(buffer, "4") == 0) {
 			return 0;
