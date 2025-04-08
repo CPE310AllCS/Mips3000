@@ -6,11 +6,6 @@ char* assm;
 extern uint32_t instruct;
 extern uint16_t state;
 
-/*
-	Purpose: prints a parameter
-	Params: Param* param - the parameter to print
-	Return: none
-*/
 char* stringParam(struct Param* param) {
 	// checks the type of parameter and prints accordingly
 	char* paramstr = malloc(20);
@@ -144,6 +139,7 @@ char * machinetostr(void) {
 
 
 char* strResult(void) {
+	// string to be returned
 	char* line = malloc(40);
 	// checks the current state and prints a corresponding message
 	switch (state) {
@@ -259,8 +255,11 @@ char* tb_assembly2machine(char* buff) {
 }
 
 void tokenize(char* res[], char* str, const char* delimiter) {
+	// Tokenize the string using the specified delimiter
 	char* token = strtok(str, delimiter);
+	//keep track of the array index added to
 	int i = 0;
+	// While there are still tokens in the string add the, to the array
 	while (token != NULL) {
 		res[i++] = token;
 		token = strtok(NULL, " ,\n");
@@ -268,13 +267,59 @@ void tokenize(char* res[], char* str, const char* delimiter) {
 	res[i] = NULL; // Null-terminate the array of tokens
 }
 
-// void compareassm(char* assm, char* final) {
-// 	char* upperAssm = strdup(assm); // Duplicate the string to avoid modifying the original
-// 	if (!upperAssm) {
-// 		perror("Memory allocation failed");
-// 		return;
-// 	}
-// }
+void dec_to_hex(char* buff, char* dec){
+	// If the string is already in hex format return it as is
+	if ((*dec == '0') && (toupper(*(dec + 1)) == 'X')) {
+		buff = dec;
+		return;
+	}
+	else{
+		// If the first character og dec exists. It will be a hashtag so move all the characters one to the left to overwrite
+		if (dec != NULL && dec[0] != '\0') { // Check if string is not NULL and not empty
+			memmove(dec, dec + 1, strlen(dec));
+		}
+		// convert the decimal to an integer and then to hex
+		int num = atoi(dec);
+		sprintf(buff, "#0X%x", num);
+		return;
+	}
+
+}
+
+void compareassm(char* arr1[], char* arr2[]){
+	// flag to keep track of any errors
+	int flag = 0;
+	// Loops through both tokenized assembly arrays
+	for (int i = 0; i < sizeof(arr1)/sizeof(arr1[0]); i++) {
+		// if The parameter is not the opcode or a register conver it to hexadecimal for comparison
+		if(i !=0 && *arr1[i]!= '$'){
+			char buff[10];
+			dec_to_hex(buff,arr1[i]);
+			char * upperbuff = strtoupper(buff);
+			// If the hexs aren't equal return it as a mismatch
+			if (strcmp(upperbuff, arr2[i]) != 0) {
+				printf("Mismatch at Parameter %d: %s vs %s\n", i, upperbuff, arr2[i]);
+				flag =1;
+			}
+		}
+		//if both arrays still have a member keep iterating and see if they are equal
+		else if (arr1[i] != NULL && arr2[i] != NULL) {
+			if (strcmp(arr1[i], arr2[i]) != 0) {
+				printf("Mismatch at Parameter %d: %s vs %s\n", i, arr1[i], arr2[i]);
+				flag =1;
+	
+			}
+		}// if they aren't equal return
+		else if (arr1[i] == NULL || arr2[i] == NULL) {
+			return;
+		}
+	}
+	// If no mismatches were found return it as a match
+	if (flag == 0) {
+		printf("The assembly and final strings match.\n");
+	}
+	return;
+}
 char * strtoupper(char* str){
 	char* upperstr = strdup(str); // Duplicate the string to avoid modifying the original
 	if (!upperstr) {
@@ -288,10 +333,17 @@ char * strtoupper(char* str){
 	}
 	return upperstr;
 }
-int testbench(void)
+void testbench(void)
 {
+	// loop until empty string is entered
+	while(1){
+	
     char buffer[BUFF_SIZE] = { '\0' };
     char* mach = tb_assembly2machine(buffer);
+	if (strlen(mach) == 0) {
+		break;
+	}
+
 	printf("%s\n", mach);
 	char* final = tb_binary2assembly(mach);
 	printf("%s\n", final);
@@ -305,23 +357,8 @@ int testbench(void)
 
 	char* tokens2[5];
 	tokenize(tokens2, upperFinal, ", ");
-	int flag = 0;
-	for (int i = 0; i < 5; i++) {
-		if (tokens1[i] != NULL && tokens2[i] != NULL) {
-			if (strcmp(tokens1[i], tokens2[i]) != 0) {
-				printf("Mismatch at Parameter %d: %s vs %s\n", i, tokens1[i], tokens2[i]);
-				flag =1;
-			}
-		}
-		else if (tokens1[i] != NULL || tokens2[i] != NULL) {
-			printf("Mismatch at Parameter %d: %s vs %s\n", i, tokens1[i], tokens2[i]);
-			flag =1;
-		}
+	
+	compareassm(tokens1,tokens2);
 	}
-	if (flag == 0) {
-		printf("The assembly and final strings match.\n");
-	}
-
-	free(mach);
-	return 0;
+	return;
 }

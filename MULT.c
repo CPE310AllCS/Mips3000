@@ -65,7 +65,8 @@ void mult_reg_assm(void) {
 	*/
 
 	// Set the opcode
-	setBits_str(31, 6, 6);
+	// changed from setBits_str to setBits_num to get correct function
+	setBits_num(31, 0, 6);
 
 	// Set the funct
 	setBits_str(5, "011000");
@@ -97,9 +98,10 @@ void mult_reg_bin(void) {
 		Finding values in the binary
 	*/
 	//getBits(start_bit, width)
-	uint32_t Rd = getBits_num(15, 5);
-	uint32_t Rs = getBits_num(25, 5);
-	uint32_t Rt = getBits_num(20, 5);
+	//changed all the getBits from getBits_num to get correct function
+	uint32_t Rd = getBits(15, 5);
+	uint32_t Rs = getBits(25, 5);
+	uint32_t Rt = getBits(20, 5);
 
 	/*
 		Setting instruction values
