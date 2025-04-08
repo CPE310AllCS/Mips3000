@@ -105,8 +105,8 @@ void lw_immd_bin(void) {
 	*/
 
 	setOp("LW");
-	setParam(1, REGISTER, Rt);//destination being loaded into
-	setParam(2, REGISTER, Rs);//Register whose memory location is to be gotten. Change from param 3 to 2
+	setParam(1, REGISTER, Rs);//destination being loaded into. Switched from Rt to Rs 
+	setParam(2, REGISTER, Rt);//Register whose memory location is to be gotten. Change from param 3 to 2. Switched from Rs to Rt
 	setParam(3, IMMEDIATE, imm16);// offset the amount of memory locations from register. switched param 2 with 3
 	// tell the system the decoding is done
 	state = COMPLETE_DECODE;

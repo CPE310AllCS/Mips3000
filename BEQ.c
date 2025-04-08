@@ -43,13 +43,13 @@ void beq_immd_assm(void) {
 		Checking the value of parameters
 	*/
 
-	// Rt should be 31 or less
+	// Rs should be 31 or less Rs switched to first pa
 	if (PARAM1.value > 31) {
 		state = INVALID_REG;
 		return;
 	}
 
-	// Rs should be 31 or less
+	// Rt should be 31 or less Rt switched to second parameter
 	if (PARAM2.value > 31) {
 		state = INVALID_REG;
 		return;
@@ -109,8 +109,8 @@ void beq_immd_bin(void) {
 	setOp("BEQ");
 	//setCond_num(cond);
 	//setParam(param_num, param_type, param_value)
-	setParam(1, REGISTER, Rt); // first dource register operand. Changed from Rt to Rs
-	setParam(2, REGISTER, Rs); // source register operand. Changed from Rs to Rt
+	setParam(1, REGISTER, Rs); // first dource register operand. Changed from Rt to Rs
+	setParam(2, REGISTER, Rt); // source register operand. Changed from Rs to Rt
 	setParam(3, IMMEDIATE, offset); // immediate operand
 
 	// tell the system the decoding is done
