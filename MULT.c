@@ -32,30 +32,18 @@ void mult_reg_assm(void) {
 		return;
 	}
 
-	// This is MULT register, so param 3 needs to be a register
-	if (PARAM3.type != REGISTER) {
-		state = MISSING_REG;
-		return;
-	}
-
 	/*
 		Checking the value of parameters
 	*/
 
-	// Rd should be 31 or less
+	// Rs should be 31 or less
 	if (PARAM1.value > 31) {
 		state = INVALID_REG;
 		return;
 	}
 
-	// Rs should be 31 or less
-	if (PARAM2.value > 31) {
-		state = INVALID_REG;
-		return;
-	}
-
 	// Rt should be 31 or less
-	if (PARAM3.value > 31) {
+	if (PARAM2.value > 31) {
 		state = INVALID_REG;
 		return;
 	}
@@ -70,9 +58,6 @@ void mult_reg_assm(void) {
 
 	// Set the funct
 	setBits_str(5, "011000");
-
-	// set rd
-	setBits_num(15, PARAM1.value, 5);
 
 	// set rs
 	setBits_num(25, PARAM2.value, 5);
@@ -99,7 +84,6 @@ void mult_reg_bin(void) {
 	*/
 	//getBits(start_bit, width)
 	//changed all the getBits from getBits_num to get correct function
-	uint32_t Rd = getBits(15, 5);
 	uint32_t Rs = getBits(25, 5);
 	uint32_t Rt = getBits(20, 5);
 
@@ -110,7 +94,6 @@ void mult_reg_bin(void) {
 	setOp("MULT");
 	//setCond_num(cond);
 	//setParam(param_num, param_type, param_value)
-	setParam(1, REGISTER, Rd); //destination
 	setParam(2, REGISTER, Rs); //first source register operand
 	setParam(3, REGISTER, Rt); //second source register operand
 

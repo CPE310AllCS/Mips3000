@@ -1,8 +1,17 @@
+/*
+* Author: Caden Youngblood
+* Date: 04/04/2025
+* ByteForge Systems
+* MIPS-Translatron 3000
+*/
+
 #include "Instruction.h"
 
 void mfhi_reg_assm(void) {
+	// Checking that the op code matches
+	// strcmp(string1, string2) return 0 if they match
 	if (strcmp(OP_CODE, "MFHI") != 0) {
-
+		// If the op code doesnt match, this isnt the correct command
 		state = WRONG_COMMAND;
 		return;
 	}
@@ -36,7 +45,7 @@ void mfhi_reg_assm(void) {
 	setBits_num(15, PARAM1.value, 5);
 
 	// Set the funct 
-	setBits_str(5, "010010");
+	setBits_str(5, "010000");
 	// set 25-16 as 0s 
 	setBits_str(21, "000000");
 	setBits_str(25, "000000");
@@ -52,7 +61,7 @@ void mfhi_reg_bin(void) {
 	// check_bits(start_bit, bit_string) returns 0 if the bit_string matches
 	//  any x will be skipped
 	// If the manual shows (0), then the value of that bit doesnt matter
-	if (checkBits(31, "000000") != 0 || checkBits(5, "010010") != 0 || checkBits(25, "0000000000") != 0 || checkBits(10, "00000") != 0) {
+	if (checkBits(31, "000000") != 0 || checkBits(5, "010000") != 0 || checkBits(25, "0000000000") != 0 || checkBits(10, "00000") != 0) {
 		state = WRONG_COMMAND;
 		return;
 	}
