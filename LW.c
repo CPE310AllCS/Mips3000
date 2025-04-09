@@ -28,14 +28,14 @@ void lw_immd_assm(void) {
 	}
 
 	//for lw second parameter is a register. This was changed from an intermediate to a register
-	if (PARAM2.type != REGISTER) {
-		state = MISSING_REG; // changed from wrong immediate to missing register error
+	if (PARAM2.type !=  IMMEDIATE) {
+		state = INVALID_IMMED; 
 		return;
 	}
 
 	// for lw the third parameter should be an immediate
-	if (PARAM3.type != IMMEDIATE) {// changed from register to an immediate
-		state = INVALID_PARAM; // changed error to be more specific
+	if (PARAM3.type != REGISTER) {
+		state = MISSING_REG; 
 		return;
 	}
 
@@ -49,30 +49,31 @@ void lw_immd_assm(void) {
 		state = INVALID_REG;
 		return;
 	}
-	// Rt should be 31 or less
-	if ( PARAM2.value > 31) {//changed from the param3 value to param2 value
-		state = INVALID_REG;
-		return;
-	}
 	// The offset value is limited to 16 bits, this is 0xFFFF
-	if ( PARAM3.value > 0xFFFF) {//changed from param2 to param3 and from being greater than x7FFF to xFFFF
+	if ( PARAM2.value > 0xFFFF) {
 		state = INVALID_IMMED;
 		return;
 	}
-
+	// Rt should be 31 or less
+	if ( PARAM3.value > 31) {
+		state = INVALID_REG;
+		return;
+	}
+	
 	/*
 		Putting the binary together
 	*/
 	
 	//Set the func
 	setBits_str(31, "100011");
-	// set Rs
-	// rearranged the set bits to be in order and assign the correct bits 
-	setBits_num(25, PARAM2.value, 5);
-	// Set the offset
-	setBits_num(15, PARAM3.value, 16);// Set Param2 as the offset for lw 
 	// set Rt
-	setBits_num(20, PARAM1.value, 5);// Set Param3 as the register for offestting in lw
+	setBits_num(20, PARAM1.value, 5);
+	// Set the offset
+	setBits_num(15, PARAM2.value, 16);
+	// set Rs
+	setBits_num(25, PARAM3.value, 5);
+	
+	
 
 	//tell the system the encoding is done
 	state = COMPLETE_ENCODE;
@@ -102,11 +103,11 @@ void lw_immd_bin(void) {
 	/*
 		Setting Instuciton values
 	*/
-
+	// Format: LW $rt, offset($rs)
 	setOp("LW");
-	setParam(1, REGISTER, Rt);//destination being loaded into. Switched from Rt to Rs 
-	setParam(2, IMMEDIATE, imm16);//Register whose memory location is to be gotten. Change from param 3 to 2. Switched from Rs to Rt
-	setParam(3, REGISTER, Rs);// offset the amount of memory locations from register. switched param 2 with 3
+	setParam(1, REGISTER, Rt); // destination register
+	setParam(2, IMMEDIATE, imm16); // Offset value
+	setParam(3, REGISTER, Rs); // base register
 	// tell the system the decoding is done
 	state = COMPLETE_DECODE;
 
