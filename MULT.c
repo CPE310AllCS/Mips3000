@@ -60,10 +60,10 @@ void mult_reg_assm(void) {
 	setBits_str(5, "011000");
 
 	// set rs
-	setBits_num(25, PARAM2.value, 5);
+	setBits_num(25, PARAM1.value, 5);
 
 	// set rt
-	setBits_num(20, PARAM3.value, 5);
+	setBits_num(20, PARAM2.value, 5);
 
 	//tell the system the encoding is done
 	state = COMPLETE_ENCODE;
@@ -94,8 +94,8 @@ void mult_reg_bin(void) {
 	setOp("MULT");
 	//setCond_num(cond);
 	//setParam(param_num, param_type, param_value)
-	setParam(2, REGISTER, Rs); //first source register operand
-	setParam(3, REGISTER, Rt); //second source register operand
+	setParam(1, REGISTER, Rs); //first source register operand
+	setParam(2, REGISTER, Rt); //second source register operand
 
 	//tell the system the decoding is done
 	state = COMPLETE_DECODE;

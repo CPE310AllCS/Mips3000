@@ -68,12 +68,11 @@ void lw_immd_assm(void) {
 	setBits_str(31, "100011");
 	// set Rs
 	// rearranged the set bits to be in order and assign the correct bits 
-	setBits_num(25, PARAM1.value, 5);
-	// set Rt
-	setBits_num(20, PARAM2.value, 5);
+	setBits_num(25, PARAM2.value, 5);
 	// Set the offset
-	setBits_num(15, PARAM3.value, 16);
-	
+	setBits_num(15, PARAM3.value, 16);// Set Param2 as the offset for lw 
+	// set Rt
+	setBits_num(20, PARAM1.value, 5);// Set Param3 as the register for offestting in lw
 
 	//tell the system the encoding is done
 	state = COMPLETE_ENCODE;
@@ -105,9 +104,9 @@ void lw_immd_bin(void) {
 	*/
 
 	setOp("LW");
-	setParam(1, REGISTER, Rs);//destination being loaded into. Switched from Rt to Rs 
-	setParam(2, REGISTER, Rt);//Register whose memory location is to be gotten. Change from param 3 to 2. Switched from Rs to Rt
-	setParam(3, IMMEDIATE, imm16);// offset the amount of memory locations from register. switched param 2 with 3
+	setParam(1, REGISTER, Rt);//destination being loaded into. Switched from Rt to Rs 
+	setParam(2, IMMEDIATE, imm16);//Register whose memory location is to be gotten. Change from param 3 to 2. Switched from Rs to Rt
+	setParam(3, REGISTER, Rs);// offset the amount of memory locations from register. switched param 2 with 3
 	// tell the system the decoding is done
 	state = COMPLETE_DECODE;
 
